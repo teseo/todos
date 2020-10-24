@@ -8,11 +8,13 @@ import { loadState, saveState } from './localStorage'
 const persistedState = loadState()
 const store = createStore(rootReducer, persistedState)
 
-store.subscribe(()=>{
+store.subscribe((d)=>{
+  console.log('#d', d)
   const currentLocalStorageState = loadState()
   const currentReduxState = store.getState()
+
   debugger;
-  if(JSON.stringify(currentLocalStorageState) !== JSON.stringify(currentReduxState.todos) ) {
+  if( currentLocalStorageState === undefined || currentReduxState.todos.date > currentLocalStorageState.todos.date ) {
       saveState(store.getState())
   }
 

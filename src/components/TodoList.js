@@ -1,18 +1,15 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import PropTypes from 'prop-types'
 import Todo from './Todo'
-import {loadState} from "../localStorage";
-//create your forceUpdate hook
-function updateTodosLocalState(todos){
-
-}
 
 const TodoList = ({ todos, toggleTodo }) => {
-  let  [localTodos,setState]=useState(todos);
+  console.log("#todos", todos)
+  let  [localTodos,setState]=useState(todos.todos);
   function handleUpdate(todos) {
     //passing empty object will re-render the component
     const parsedTodos = JSON.parse(todos)
-    setState(parsedTodos.todos);
+    console.log('#parsedTodos', parsedTodos)
+    setState(parsedTodos.todos.todos);
   }
 
   window.addEventListener('storage', function (event) {
@@ -20,9 +17,10 @@ const TodoList = ({ todos, toggleTodo }) => {
     console.log('#hey no')
     handleUpdate(event.newValue)
   });
+  console.log('#localTodos', localTodos)
   return(
     <ul>
-      {localTodos.map(todo =>
+      {todos.todos.map(todo =>
         <Todo
           key={todo.id}
           {...todo}
@@ -34,11 +32,7 @@ const TodoList = ({ todos, toggleTodo }) => {
 }
 
 TodoList.propTypes = {
-  todos: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    completed: PropTypes.bool.isRequired,
-    text: PropTypes.string.isRequired
-  }).isRequired).isRequired,
+  todos: PropTypes.object.isRequired,
   toggleTodo: PropTypes.func.isRequired,
   updateTodos: PropTypes.func.isRequired
 }
